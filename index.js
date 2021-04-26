@@ -20,17 +20,16 @@ dbConnection();
 // Configurando Cors:
 app.use(cors());
 
-// Creando rutas:
-app.get( '/', (req, res)=> {
+// Lectura y parseo del body: ( Se recomienda antes que las rutas)
+app.use( expres.json() );
 
-    res.json(
-        { 
-            "estado" : "Ok",
-            "mensaje" : " Bienvenido Visitante"
-        }
-    );
 
-});
+// Inicio Creando rutas:
+app.use('/api/usuarios', require('./routes/usuarios'));
+app.use('/api/login', require('./routes/auth'));
+
+
+// Fin Creando rutas:
 
 app.listen(process.env.PORT, ()=>{
     console.log(' Levantando servidor en puerto ' + process.env.PORT);

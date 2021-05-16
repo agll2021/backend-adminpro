@@ -15,14 +15,14 @@ const UsuarioSchema = Schema({
     },
     contrasena:{
         type: String,
-        require: true
+        required: true
     },
     img:{
         type: String         
     },
     role:{
         type: String,
-        require: true,
+        required: true,
         default: 'USER_ROLE'
     },
     google:{
@@ -34,7 +34,7 @@ const UsuarioSchema = Schema({
 
 // metodo para modificar algunos campos del json, respecto a los nombres:
 UsuarioSchema.method('toJSON', function(){
-    // Obteniendo la instancia acutal con la clase Object de Mongoose, donde tiene almancenado 
+    // Obteniendo la instancia acutal con la clase Object de Mongoose, donde tiene almacenado 
     // los campos de la metadata y poder modificarlo.
 
     const { __v, _id, contrasena, ...object } = this.toObject();

@@ -3,15 +3,32 @@ const { response } = require('express');
 const bcrypt = require('bcryptjs');
 const { generarJWT } = require('../helpers/jwt');
 
-const getUsuarios = async (req, res)=> {
+const getUsuarios = async (req, res = response)=> {
 
+    const desde = Number(req.query.desde) || 0;
+    const hasta = Number(req.query.hasta);
 
-    const usuarios = await Usuario.find({}, 'nombre correo role img google');
+    // const usuarios = await Usuario                                
+    //                             .find({}, 'nombre correo role img google')
+    //                             .skip(desde)
+    //                             .limit(hasta);
 
+    // const total = await Usuario.countDocuments();
+
+    const [usuarios , total] = await Promise.all([
+        Usuario                                
+            .find({}, 'nombre correo role img google')
+            .skip(desde)
+            .limit(hasta),
+
+        Usuario.countDocuments()  
+    ]);
+    
     res.json(
         { 
             "codigo" : "0000",
-            usuarios
+            usuarios,
+            "total": total
         }
     );
 

@@ -15,8 +15,11 @@ const app = expres();
 // contraseña: ildnap5tmSSojNMh
 dbConnection();
 
-//console.log(process.env);
+// Directorio Publico:
+app.use(expres.static('public'));
 
+
+//console.log(process.env);
 // Configurando Cors:
 app.use(cors());
 

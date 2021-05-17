@@ -111,9 +111,25 @@ const googleSignIn = async(req, res = response)=>{
    
 }
 
+const renovarToken = async (req, res = responses)=>{
 
+    const uuid = req.uid;
+    console.log('UUID: '+uuid)
+    // Generar tokem
+    const token = await generarJWT( uuid );
+
+    res.status(200).json(
+        {
+            codigo : "0000",
+            mensaje : " Login Google exitoso.",
+            uuid, 
+            token
+        }
+    );
+}
 
 module.exports = {
     login,
-    googleSignIn
+    googleSignIn,
+    renovarToken
  }

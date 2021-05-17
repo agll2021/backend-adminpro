@@ -14,7 +14,7 @@ const router = Router();
 
 router.get( 
     '/', 
-    // validarJWT,
+    validarJWT,
     getMedicos 
 );
 
@@ -32,17 +32,16 @@ router.post(
 router.put( 
     '/:id',
     [
-        // validarJWT,
-        // check('nombre','El nombre es obligatorio').not().isEmpty(),
-        // check('img', 'El contrasena es obligatorio').not().isEmpty(),
-        // check('usuario', 'El usuario es obligatorio').not().isEmpty(),
-        // validarCampos,
+        validarJWT,
+        check('nombre','El nombre es obligatorio').not().isEmpty(), 
+        check('hospital','El id hospital es obligatorio').not().isEmpty(),              
+        validarCampos,
     ],
     actualizarMedicos 
 );
 
 router.delete('/:id', 
-    // validarJWT,
+    validarJWT,
     borrarMedicos);
 
 module.exports = router;

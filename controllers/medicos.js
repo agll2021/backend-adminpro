@@ -1,8 +1,6 @@
 const Medico = require('../models/medico');
 const { response } = require('express');
-const bcrypt = require('bcryptjs');
-const { ConnectionStates } = require('mongoose');
-//  const { generarJWT } = require('../helpers/jwt');
+
 
 const getMedicos = async (req, res = response)=> {
 
@@ -14,7 +12,7 @@ const getMedicos = async (req, res = response)=> {
     res.json(
         { 
             "codigo" : "0000",
-            "medicos":  medicos
+            medicos
         }
     );
 
@@ -61,86 +59,72 @@ const crearMedicos = async(req, res = response)=> {
 
 const actualizarMedicos = async(req, res = response)=> {
 
-    // const uid = req.params.id;
+    const id = req.params.id;
+    const uuid = req.uid; 
 
-    //  try {
+     try {
 
-    //     const usuarioDB = await Usuario.findById(uid);
+        const medicoDB = await Medico.findById(id);
 
-    //     if( !usuarioDB){
-    //         return res.status(400).json(
-    //             {
-    //                 "codigo" : "6000",
-    //                 "mensaje" : "El usuario no existe en la BD."
-    //             }
-    //         );
-    //     }
+        if( !medicoDB){
+            return res.status(400).json(
+                {
+                    "codigo" : "6000",
+                    "mensaje" : "El medico no existe en la BD."
+                }
+            );
+        }
 
-        // Los campos actualizar excepto si se envia el campo contraseña y google en el cuerpo del json:
+        //Los campos actualizar excepto si se envia el campo contraseña y google en el cuerpo del json:
         //const campos = req.body;
 
-        // Refactorizando/optimizando codigo:
-        // const { contrasena,google,role,correo, ...campos} = req.body;
+        const camposActualizar = {
+            ...req.body,
+            usuario: uuid            
+        }
 
-        // if( usuarioDB.correo !==  correo){
-            
-        //     const correoExiste = await Usuario.findOne({correo});
-        //     if(correoExiste){
-        //         return res.status(400).json({
-        //             "codigo" : "6000",
-        //             "mensaje" : "El correo existe en la BD."
-        //         });
-        //     }
-        // }
-        
-        // Campos que se eliminan en el cuerpo del JSON con delete:
-        // delete campos.contrasena;
-        // delete campos.google
-        // delete campos.role
-        
-        //campos.correo = correo;
-        // Actualizacion en la BD:
-        //const usuarioActualizado = await Usuario.findByIdAndUpdate(uid, campos, { new: true});
+        //Actualizacion en la BD:
+        const medicoActualizado = await Medico.findByIdAndUpdate(id, camposActualizar, { new: true});
 
         res.json(
             {
                 "codigo" : "0000",
                 "mensaje": "Medico actualizado",
-                //usuarioActualizado
+                medicoActualizado
             }
         );
 
         
-    // } catch (error) {
-    //     console.log(error);
-    //     res.status(500).json(
-    //         {
-    //             "codigo":"9000",
-    //             "mensaje" : "Error inesperado al actualizar el hospital... revisar el logs"
-    //         }
-    //     );
-    // }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(
+            {
+                "codigo":"9000",
+                "mensaje" : "Error inesperado al actualizar el medico... revisar el logs"
+            }
+        );
+    }
 };
 
 const borrarMedicos = async (req, res= response)=>{
 
-    // try {
+    try {
 
-        // const uid = req.params.id;
+        const id = req.params.id;
         
-        // validacion que el uid existe en la BD
-        // const usuarioDB = await Usuario.findById(uid);
+        //validacion que el uid existe en la BD
+        const medicoDB = await Medico.findById(id);
 
-        // if( !usuarioDB){
-        //     return res.status(400).json(
-        //         {
-        //             "codigo" : "6000",
-        //             "mensaje" : "El usuario no existe en la BD."
-        //         }
-        //     );
-        // }
+        if( !medicoDB){
+            return res.status(400).json(
+                {
+                    "codigo" : "6000",
+                    "mensaje" : "El Medico no existe en la BD."
+                }
+            );
+        }
 
-        // await Usuario.findByIdAndDelete(uid);
+        await Medico.findByIdAndDelete(id);
 
         res.json(
             {
@@ -149,15 +133,15 @@ const borrarMedicos = async (req, res= response)=>{
             }
         );
 
-    // } catch (error) {
-    //     console.log(error);
-    //     res.status(500).json(
-    //         {
-    //             "codigo":"9000",
-    //             "mensaje" : "Error inesperado al borrar el usuario... revisar el logs"
-    //         }
-    //     );
-    // }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(
+            {
+                "codigo":"9000",
+                "mensaje" : "Error inesperado al borrar el medico... revisar el logs"
+            }
+        );
+    }
 };
 
 

@@ -11,7 +11,7 @@ const router = Router();
 
 router.get( 
     '/', 
-    // validarJWT,
+    validarJWT,
     getHospitales 
 );
 
@@ -28,17 +28,15 @@ router.post(
 router.put( 
     '/:id',
     [
-        // validarJWT,
-        // check('nombre','El nombre es obligatorio').not().isEmpty(),
-        // check('img', 'El contrasena es obligatorio').not().isEmpty(),
-        // check('usuario', 'El usuario es obligatorio').not().isEmpty(),
-        // validarCampos,
+        validarJWT,
+        check('nombre','El nombre es obligatorio').not().isEmpty(),        
+        validarCampos,
     ],
     actualizarHospitales 
 );
 
 router.delete('/:id', 
-    // validarJWT,
+    validarJWT,
     borrarHospitales);
 
 module.exports = router;

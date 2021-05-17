@@ -26,7 +26,6 @@ const crearHospitales = async(req, res = response)=> {
      
 
         // Crear una instancia del modelo
-        
         // const hospital = new Hospital(req.body);
 
         // destructurar
@@ -63,86 +62,71 @@ const crearHospitales = async(req, res = response)=> {
 
 const actualizarHospitales = async(req, res = response)=> {
 
-    // const uid = req.params.id;
+    const id = req.params.id;
+    const uid = req.uid;
+     try {
 
-    //  try {
+        const hospitalDB = await Hospital.findById(id);
 
-    //     const usuarioDB = await Usuario.findById(uid);
+        if( !hospitalDB){
+            return res.status(400).json(
+                {
+                    "codigo" : "6000",
+                    "mensaje" : "El hospital no existe en la BD."
+                }
+            );
+        }
 
-    //     if( !usuarioDB){
-    //         return res.status(400).json(
-    //             {
-    //                 "codigo" : "6000",
-    //                 "mensaje" : "El usuario no existe en la BD."
-    //             }
-    //         );
-    //     }
+        //const { nombre } = req.body;
 
-        // Los campos actualizar excepto si se envia el campo contraseña y google en el cuerpo del json:
-        //const campos = req.body;
+        const cambiosHospital = {
+            ...req.body,
+            usuario:uid
+        }
 
-        // Refactorizando/optimizando codigo:
-        // const { contrasena,google,role,correo, ...campos} = req.body;
-
-        // if( usuarioDB.correo !==  correo){
-            
-        //     const correoExiste = await Usuario.findOne({correo});
-        //     if(correoExiste){
-        //         return res.status(400).json({
-        //             "codigo" : "6000",
-        //             "mensaje" : "El correo existe en la BD."
-        //         });
-        //     }
-        // }
-        
-        // Campos que se eliminan en el cuerpo del JSON con delete:
-        // delete campos.contrasena;
-        // delete campos.google
-        // delete campos.role
-        
-        //campos.correo = correo;
-        // Actualizacion en la BD:
-        //const usuarioActualizado = await Usuario.findByIdAndUpdate(uid, campos, { new: true});
+        //Actualizacion en la BD:
+        //const hospitalActualizado = await Hospital.findByIdAndUpdate(uid, {nombre}, { new: true});
+        const hospitalActualizado = await Hospital.findByIdAndUpdate(id, cambiosHospital, { new: true});
 
         res.json(
             {
                 "codigo" : "0000",
                 "mensaje": "Hospital actualizado",
-                //usuarioActualizado
+                hospitalActualizado
             }
         );
 
         
-    // } catch (error) {
-    //     console.log(error);
-    //     res.status(500).json(
-    //         {
-    //             "codigo":"9000",
-    //             "mensaje" : "Error inesperado al actualizar el hospital... revisar el logs"
-    //         }
-    //     );
-    // }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(
+            {
+                "codigo":"9000",
+                "mensaje" : "Error inesperado al actualizar el hospital... revisar el logs"
+            }
+        );
+    }
 };
 
 const borrarHospitales = async (req, res= response)=>{
 
-    // try {
+    try {
 
-        // const uid = req.params.id;
+        const id = req.params.id;
         
-        // validacion que el uid existe en la BD
-        // const usuarioDB = await Usuario.findById(uid);
+        //validacion que el uid existe en la BD
+        const hospitalDB = await Hospital.findById(id);
 
-        // if( !usuarioDB){
-        //     return res.status(400).json(
-        //         {
-        //             "codigo" : "6000",
-        //             "mensaje" : "El usuario no existe en la BD."
-        //         }
-        //     );
-        // }
+        if( !hospitalDB){
+            return res.status(400).json(
+                {
+                    "codigo" : "6000",
+                    "mensaje" : "El hospital no existe en la BD."
+                }
+            );
+        }
 
-        // await Usuario.findByIdAndDelete(uid);
+        await Hospital.findByIdAndDelete(id);
 
         res.json(
             {
@@ -151,15 +135,15 @@ const borrarHospitales = async (req, res= response)=>{
             }
         );
 
-    // } catch (error) {
-    //     console.log(error);
-    //     res.status(500).json(
-    //         {
-    //             "codigo":"9000",
-    //             "mensaje" : "Error inesperado al borrar el usuario... revisar el logs"
-    //         }
-    //     );
-    // }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(
+            {
+                "codigo":"9000",
+                "mensaje" : "Error inesperado al borrar el hospital... revisar el logs"
+            }
+        );
+    }
 };
 
 
